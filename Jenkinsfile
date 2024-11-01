@@ -10,11 +10,6 @@ pipeline {
                 }
             }
         }
-        agent {
-            docker {
-                args '-v /var/lib/jenkins/workspace/Testing/allure-results:/allure-results'
-            }
-        }
         stage('Run tests') {
             steps {
                 catchError {
