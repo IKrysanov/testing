@@ -14,7 +14,7 @@ pipeline {
             steps {
                 catchError {
                     script {
-                            docker.image('python-web-tests').Run {
+                            docker.image('python-web-tests').inside {
                                 sh "pytest ${CMD_PARAMS}"
                             }
                     }
