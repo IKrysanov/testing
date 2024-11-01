@@ -23,23 +23,23 @@ pipeline {
             steps {
                 catchError {
                     script {
-                            docker.image('python-web-tests') { c ->
+                            docker.image('python-web-tests') {
                                 sh "pytest -v -s alluredir=report ${CMD_PARAMS}"
                             }
                     }
                 }
             }
         }
-        // stage('Reports') {
-        //     steps {
-        //         allure([
-        //      includeProperties: false,
-        //      jdk: '',
-        //      properties: [],
-        //      reportBuildPolicy: 'ALWAYS',
-        //      results: [[path: 'report']]
-        //    ])
-        //     }
-        // }
+        stage('Reports') {
+            steps {
+                allure([
+             includeProperties: false,
+             jdk: '',
+             properties: [],
+             reportBuildPolicy: 'ALWAYS',
+             results: [[path: 'report']]
+           ])
+            }
+        }
     }
 }
