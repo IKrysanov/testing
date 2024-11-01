@@ -10,16 +10,21 @@ pipeline {
                 }
             }
         }
-        environment {
-            ALLURE_RESULTS_DIR = '/tmp/allure-results' // Общая директория для allure-results
+        stage('Pull browser') {
+            steps {
+                catchError {
+                    script {
+                        docker.image('selenoid/chrome:92.0')
+                    }
+                }
+            }
         }
         stage('Run tests') {
             steps {
                 catchError {
                     script {
-                            sh 'mkdir -p ${ALLURE_RESULTS_DIR}'
                             docker.image('python-web-tests') { c ->
-                                sh "pytest -v -s ${CMD_PARAMS} --alluredir=${ALLURE_RESULTS_DIR}"
+                                sh "pytest -v -s alluredir=report ${CMD_PARAMS}"
                             }
                     }
                 }
