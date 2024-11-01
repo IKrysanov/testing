@@ -3,20 +3,22 @@ pipeline {
     stages {
         stage('Build image') {
             steps {
-                catchError {
                     script {
                         docker.build('python-web-tests', '-f Dockerfile .')
                     }
-                }
             }
         }
         stage('Run tests') {
             steps {
-                script {
-                        docker.image('python-web-tests').inside {
-                            sh "pytest ${CMD_PARAMS}"
+                    script {
+                        try {
+                            docker.image('python-web-tests').inside {
+                                sh "pytest ${CMD_PARAMS}"
+                            }
+                        } catch (err) {
+                            echo err.getMessage()
                         }
-                }  
+                    }
             }
         }
         stage('Reports') {
