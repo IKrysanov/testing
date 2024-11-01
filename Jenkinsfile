@@ -1,45 +1,45 @@
 pipeline {
-    agent {
-        docker {
-            image 'python:3.9' // используем образ с Python, можно заменить на необходимую версию
-            args '-v /tmp:/tmp' // монтируем временную директорию для отчетов allure
-        }
-    }
-    environment {
-        PYTHONPATH = '.' // добавляем текущую директорию в PYTHONPATH
-        ALLURE_RESULTS = '/tmp/allure-results' // директория для сохранения результатов allure
-    }
+    agent any
     stages {
-        stage('Install dependencies') {
+        stage('Build image') {
             steps {
-                script {
-                    // Устанавливаем pytest и allure
-                    sh 'pip install pytest allure-pytest'
+                catchError {
+                    script {
+                        docker.build('python-web-tests', '-f Dockerfile .')
+                    }
+                }
+            }
+        }
+        stage('Pull browser') {
+            steps {
+                catchError {
+                    script {
+                        docker.image('selenoid/chrome:92.0')
+                    }
                 }
             }
         }
         stage('Run tests') {
             steps {
-                script {
-                    // Создаем папку для результатов Allure, если она не существует
-                    sh 'mkdir -p ${ALLURE_RESULTS}'
-
-                    // Запускаем тесты с использованием pytest и сохраняем результаты allure
-                    sh 'pytest your_test_file.py --alluredir=${ALLURE_RESULTS}'
+                catchError {
+                    script {
+                            docker.image('python-web-tests') { c ->
+                                sh "pytest -n 2 --reruns 1 ${CMD_PARAMS}"
+                            }
+                    }
                 }
             }
         }
-        stage('Allure Report') {
+        stage('Reports') {
             steps {
-                // Публикуем отчет Allure, если он установлен на Jenkins
-                allure includeProperties: false, jdk: '', reportBuildPolicy: 'ALWAYS', results: [[path: "${ALLURE_RESULTS}"]]
+                allure([
+             includeProperties: false,
+             jdk: '',
+             properties: [],
+             reportBuildPolicy: 'ALWAYS',
+             results: [[path: 'report']]
+           ])
             }
-        }
-    }
-    post {
-        always {
-            // Удаляем временные файлы после завершения работы
-            cleanWs()
         }
     }
 }
