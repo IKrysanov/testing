@@ -10,12 +10,17 @@ pipeline {
                 }
             }
         }
+        agent {
+            docker {
+                args '-v /var/lib/jenkins/workspace/Testing/allure-results:/allure-results'
+            }
+        }
         stage('Run tests') {
             steps {
                 catchError {
                     script {
                             docker.image('python-web-tests') {
-                                sh "pytest -v -s ${CMD_PARAMS}"
+                                sh "pytest ${CMD_PARAMS}"
                             }
                     }
                 }
