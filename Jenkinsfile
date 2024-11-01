@@ -12,13 +12,11 @@ pipeline {
         }
         stage('Run tests') {
             steps {
-                catchError {
-                    script {
-                            docker.image('python-web-tests').inside {
-                                sh "pytest ${CMD_PARAMS}"
-                            }
-                    }
-                }
+                script {
+                        docker.image('python-web-tests').inside {
+                            sh "pytest ${CMD_PARAMS}"
+                        }
+                }  
             }
         }
         stage('Reports') {
