@@ -2,4 +2,4 @@ venv/
 __pycache__
 report/
 .pytest_cache
-allure-report/
+# allure-report/
