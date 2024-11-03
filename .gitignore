@@ -3,3 +3,4 @@ __pycache__
 report/
 .pytest_cache
 allure-report/
+.env

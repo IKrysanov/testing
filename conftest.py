@@ -1,17 +1,20 @@
+import os
 import pytest
 import allure
 from http import HTTPMethod
-from configuration import URL_SERVER, API_USERS
+from configuration import URL, API_USERS
 from http import HTTPStatus
 
 from utils.client import Client
+
+
 
 @allure.title("Создание пользователя")
 @pytest.fixture(scope="session")
 def create_user():
     response = Client.custom_requests(
             HTTPMethod.POST,
-            f"{URL_SERVER}{API_USERS}",
+            f"{URL}{API_USERS}",
             expected_status_code=HTTPStatus.CREATED,
             json={
                 "firstName": "Григорий",

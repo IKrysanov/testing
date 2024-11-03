@@ -8,6 +8,19 @@ pipeline {
                     }
             }
         }
+        stage('Create env') {
+            steps {
+                    script {
+                        try {
+                            docker.image('python-web-tests').inside {
+                                sh "export URL_SERVICE=${URL_SERVICE}"
+                            }
+                        } catch (err) {
+                            echo err.getMessage()
+                        }
+                    }
+            }
+        }
         stage('Run tests') {
             steps {
                     script {
