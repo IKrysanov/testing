@@ -13,7 +13,6 @@ pipeline {
                     script {
                         try {
                             docker.image('python-web-tests').inside {
-                                sh "allure generate --clean --output result"
                                 sh "pytest ${CMD_PARAMS}"
                             }
                         } catch (err) {
