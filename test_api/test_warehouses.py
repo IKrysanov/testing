@@ -2,7 +2,7 @@ from utils.client import Client
 import allure
 from http import HTTPMethod, HTTPStatus
 import data
-from configuration import API_WAREHOUSES, API_WAREHOUSES_CHECK
+from configuration import API_WAREHOUSES, API_WAREHOUSES_CHECK, API_WAREHOUSES_AMOUNT
 from schemas.warehouses import schema_warehouses
 
 
@@ -31,7 +31,7 @@ class TestWarehousesPositive:
     def test_post_warehouses_amount(self, create_user):
         Client.custom_requests(
             HTTPMethod.POST,
-            API_WAREHOUSES_CHECK, # /api/v1/warehouses/amount
+            API_WAREHOUSES_AMOUNT, # /api/v1/warehouses/amount
             headers=data.headers,
             json=data.amount_body,
             validator=False
