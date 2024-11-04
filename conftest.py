@@ -1,7 +1,7 @@
 import pytest
 import allure
 from http import HTTPMethod
-from configuration import URL, API_USERS
+from configuration import API_USERS
 from http import HTTPStatus
 import data
 from utils.client import Client
@@ -12,7 +12,7 @@ from utils.client import Client
 def create_user():
     response = Client.custom_requests(
         HTTPMethod.POST,
-        f"{URL}{API_USERS}",
+        API_USERS,
         expected_status_code=HTTPStatus.CREATED,
         json=data.user_body,
         validator=False,

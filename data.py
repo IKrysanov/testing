@@ -10,3 +10,7 @@ user_body = {
     "comment": "Ребёнок спит, не шумите",
     "address": "г. Москва, ул. Хохотушкина, д. 16",
 }
+
+products_body = {"products": [{"id": 2, "quantity": 1}]}
+
+amount_body = {"ids": [0, 1, 2, 3]}
